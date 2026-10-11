@@ -67,6 +67,7 @@ let file = null;
 let image = null;
 
 const filersContainer = document.querySelector(".filters");
+const presetsContainer = document.querySelector(".presets");
 
 function createFilterElement(name, unit = "%", value, min, max) {
   const div = document.createElement("div");
@@ -91,6 +92,8 @@ function createFilterElement(name, unit = "%", value, min, max) {
   });
   return div;
 }
+
+function createPresetElement(name, preset) {}
 
 function createFilters() {
   Object.keys(filters).forEach((key) => {
@@ -212,10 +215,219 @@ resetBtn.addEventListener("click", () => {
   createFilters();
 });
 
+downloadBtn.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.download = "edited-image.png";
+  link.href = imageCanvas.toDataURL();
+  link.click();
+});
 
-downloadBtn.addEventListener("click",()=>{
-    const link = document.createElement("a");
-    link.download = "edited-image.png";
-    link.href = imageCanvas.toDataURL();
-    link.click();
-})
+const presets = {
+  normal: {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 0,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+
+  drama: {
+    brightness: 90,
+    contrast: 145,
+    saturation: 125,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 10,
+    sepia: 5,
+    opacity: 100,
+    invert: 0,
+  },
+
+  vintage: {
+    brightness: 105,
+    contrast: 90,
+    saturation: 75,
+    Huerotation: 350,
+    blur: 0.3,
+    grayscale: 10,
+    sepia: 35,
+    opacity: 100,
+    invert: 0,
+  },
+
+  oldSchool: {
+    brightness: 95,
+    contrast: 110,
+    saturation: 65,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 25,
+    sepia: 45,
+    opacity: 100,
+    invert: 0,
+  },
+
+  cinematic: {
+    brightness: 85,
+    contrast: 130,
+    saturation: 85,
+    Huerotation: 345,
+    blur: 0,
+    grayscale: 15,
+    sepia: 10,
+    opacity: 100,
+    invert: 0,
+  },
+
+  blackAndWhite: {
+    brightness: 105,
+    contrast: 130,
+    saturation: 0,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 100,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+
+  faded: {
+    brightness: 115,
+    contrast: 80,
+    saturation: 70,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 5,
+    sepia: 15,
+    opacity: 100,
+    invert: 0,
+  },
+
+  cool: {
+    brightness: 100,
+    contrast: 110,
+    saturation: 110,
+    Huerotation: 190,
+    blur: 0,
+    grayscale: 0,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+
+  warm: {
+    brightness: 105,
+    contrast: 105,
+    saturation: 115,
+    Huerotation: 350,
+    blur: 0,
+    grayscale: 0,
+    sepia: 20,
+    opacity: 100,
+    invert: 0,
+  },
+
+  moody: {
+    brightness: 75,
+    contrast: 135,
+    saturation: 70,
+    Huerotation: 210,
+    blur: 0,
+    grayscale: 15,
+    sepia: 5,
+    opacity: 100,
+    invert: 0,
+  },
+
+  fadedFilm: {
+    brightness: 110,
+    contrast: 85,
+    saturation: 80,
+    Huerotation: 5,
+    blur: 0.2,
+    grayscale: 10,
+    sepia: 25,
+    opacity: 100,
+    invert: 0,
+  },
+
+  dreamy: {
+    brightness: 115,
+    contrast: 90,
+    saturation: 110,
+    Huerotation: 340,
+    blur: 1,
+    grayscale: 0,
+    sepia: 5,
+    opacity: 100,
+    invert: 0,
+  },
+
+  noir: {
+    brightness: 80,
+    contrast: 160,
+    saturation: 0,
+    Huerotation: 0,
+    blur: 0,
+    grayscale: 100,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+
+  retro: {
+    brightness: 105,
+    contrast: 95,
+    saturation: 85,
+    Huerotation: 10,
+    blur: 0,
+    grayscale: 15,
+    sepia: 30,
+    opacity: 100,
+    invert: 0,
+  },
+
+  cyberpunk: {
+    brightness: 95,
+    contrast: 140,
+    saturation: 160,
+    Huerotation: 280,
+    blur: 0,
+    grayscale: 0,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+
+  soft: {
+    brightness: 110,
+    contrast: 90,
+    saturation: 95,
+    Huerotation: 0,
+    blur: 0.5,
+    grayscale: 0,
+    sepia: 0,
+    opacity: 100,
+    invert: 0,
+  },
+};
+
+Object.keys(presets).forEach((presetName) => {
+  const presetbtn = document.createElement("button");
+  presetbtn.classList.add("preset-btn");
+  presetbtn.innerText = presetName;
+  presetsContainer.appendChild(presetbtn);
+
+  presetbtn.addEventListener("click", () => {
+    const preset = presets[presetName];
+    Object.keys(preset).forEach((filterName) => {
+      filters[filterName].value = preset[filterName];
+    });
+
+    applyFilters();
+  });
+});
