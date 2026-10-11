@@ -1,4 +1,4 @@
-const filters = {
+let filters = {
   brightness: {
     value: 100,
     min: 0,
@@ -7,13 +7,6 @@ const filters = {
   },
 
   contrast: { value: 100, min: 0, max: 200, unit: "%" },
-
-  exposure: {
-    value: 100,
-    min: 0,
-    max: 200,
-    unit: "%",
-  },
 
   saturation: {
     value: 100,
@@ -40,6 +33,7 @@ const filters = {
     value: 0,
     min: 0,
     max: 100,
+    unit: "%",
   },
 
   sepia: {
@@ -67,6 +61,7 @@ const filters = {
 const imageCanvas = document.querySelector("#image-canvas");
 const imageInput = document.querySelector("#image-input");
 const canvasCtx = imageCanvas.getContext("2d");
+const resetBtn = document.querySelector("#reset-btn");
 let file = null;
 let image = null;
 
@@ -111,6 +106,7 @@ Object.keys(filters).forEach((key) => {
 imageInput.addEventListener("change", (event) => {
   file = event.target.files[0];
   const imagePlaceholder = document.querySelector(".placeholder");
+  imageCanvas.style.display = "block";
   imagePlaceholder.style.display = "none";
 
   const img = new Image();
@@ -125,6 +121,85 @@ imageInput.addEventListener("change", (event) => {
 });
 
 function applyFilters() {
-  canvasCtx.filter = `brightness(${filters.brightness.value}${filters.brightness.unit})`;
+  if (!image) return;
+
+  canvasCtx.clearRect(0, 0, imageCanvas.width, imageCanvas.height);
+
+  canvasCtx.filter = `
+    brightness(${filters.brightness.value}${filters.brightness.unit})
+    contrast(${filters.contrast.value}${filters.contrast.unit})
+    saturate(${filters.saturation.value}${filters.saturation.unit})
+    hue-rotate(${filters.Huerotation.value}${filters.Huerotation.unit})
+    blur(${filters.blur.value}${filters.blur.unit})
+    grayscale(${filters.grayscale.value}${filters.grayscale.unit})
+    sepia(${filters.sepia.value}${filters.sepia.unit})
+    opacity(${filters.opacity.value}${filters.opacity.unit})
+    invert(${filters.invert.value}${filters.invert.unit})
+  `;
+
   canvasCtx.drawImage(image, 0, 0);
 }
+
+resetBtn.addEventListener("click", () => {
+  filters = {
+    brightness: {
+      value: 100,
+      min: 0,
+      max: 200,
+      unit: "%",
+    },
+
+    contrast: { value: 100, min: 0, max: 200, unit: "%" },
+
+    saturation: {
+      value: 100,
+      min: 0,
+      max: 200,
+      unit: "%",
+    },
+
+    Huerotation: {
+      value: 0,
+      min: 0,
+      max: 360,
+      unit: "deg",
+    },
+
+    blur: {
+      value: 0,
+      min: 0,
+      max: 20,
+      unit: "px",
+    },
+
+    grayscale: {
+      value: 0,
+      min: 0,
+      max: 100,
+      unit: "%",
+    },
+
+    sepia: {
+      value: 0,
+      min: 0,
+      max: 100,
+      unit: "%",
+    },
+
+    opacity: {
+      value: 100,
+      min: 0,
+      max: 100,
+      unit: "%",
+    },
+
+    invert: {
+      value: 0,
+      min: 0,
+      max: 100,
+      unit: "%",
+    },
+  };
+
+  applyFilters();
+});
